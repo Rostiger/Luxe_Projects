@@ -50,17 +50,21 @@ class Main extends luxe.Game {
         // set the array size
         var arraySize : Int = levelWidth * levelHeight;
 
-        // initialise the array with the full level size determined above and fill every entry with 'null'
+        // initialise the array using the size determined above
+        // fill each entries with 'null'
         level = [for (i in 0...arraySize) null ];
 
-        // now fill the array with invisible sprites
+        // now fill the array with something useful - sprites!
+        // each sprite will represent a level tile
         for (xi in 0...levelWidth) {
             for (yi in 0...levelHeight) {
 
                 // treat the array like a 2d array
-                // by adding the y value x the levelWidth
+                // instead of getting the index using arrayname[x][y]
+                // the index is calculated with this formula: x + y * arrayWidth
                 var index : Int = xi + yi * levelWidth;
                 
+                // now store an invisible sprite in the array at the position of the index
                 level[index] = new Sprite({
                     name : 'tile'+index,
                     pos : new Vector(tileSize * xi, tileSize * yi),
@@ -69,7 +73,9 @@ class Main extends luxe.Game {
                     color : new Color().rgb(tileColor),
                 });
 
-                // create a frame of visible around the window
+                // we want a border around the level made of tiles
+                // check the position of the current tile in the index
+                // and set it to visible or invisible accordingly
                 if (xi == 0 || xi == levelWidth - 1 || yi == 0 || yi == levelHeight - 1) level[index].visible = true;
                 else level[index].visible = false;
 
@@ -79,7 +85,8 @@ class Main extends luxe.Game {
 
     function createCursor() {
 
-        // setup the mouse cursor
+        // create a sprite for the mouse cursor
+        // and place it in the middle of the screen
         cursor = new Sprite({
             name : 'cursor',
             pos : new Vector(Luxe.screen.mid.x,Luxe.screen.mid.y),
@@ -88,15 +95,21 @@ class Main extends luxe.Game {
             centered : false,
         });
 
+        // set the alpha of the cursor color
         cursor.color.a = 0.3;
     } // createCursor
 
     function createPlayer() {
 
+        // here I've set up a new scene for the player
+        // this is actually an unnecessary misuse of the scene concept (as far as I can tell),
+        // but I wanted to learn how it works :)
+        // I'll re-write this later to make proper use of the scene
         if (playerScene != null) return;
 
         playerScene = new Scene( 'player scene' );
 
+        // set up the player sprite
         var player = new Sprite({
             name : 'player',
             pos : new Vector( (levelWidth / 2) * tileSize, (levelHeight / 2) * tileSize ),
@@ -106,13 +119,16 @@ class Main extends luxe.Game {
             centered : false
         });
 
+        // add the movement component
         player.add(new Movement({ name:'movement' }));
 
+        // connect the input
         connectInput();
     } // createPlayer
 
     function connectInput() {
 
+        // here the keys are defined that can be used for input
         Luxe.input.add('left', Key.left);
         Luxe.input.add('left', Key.key_a);
 
@@ -126,33 +142,41 @@ class Main extends luxe.Game {
     var removeBlocks : Bool = false;
     var addBlocks    : Bool = false;
 
-    function toggleBlock(posX : Float, posY : Float) {
+    function toggleBlock( x : Float, y : Float ) {
 
-        var x : Int = Std.int(posX / tileSize);
-        var y : Int = Std.int(posY / tileSize);
+        // this function sets the tile visible or invisible
 
-        var index : Int = x + y * levelWidth;
+        x = Math.floor(x / tileSize);        // converts the level x position to the leve array x position
+        y = Math.floor(y / tileSize);        // same for the y position
 
+        // get the index
+        var index : Int = Std.int(x + y * levelWidth);
+
+        // if the tile is visible and the player isn't currently removing blocks
         if (!level[index].visible && !removeBlocks) {
 
+            // 'add' a block
             level[index].visible = true;
-            level[index].color = new Color().rgb(tileColor);
             addBlocks = true;
 
+        // otherwise if the player isn't currently adding blocks
         } else if (!addBlocks) {
 
+            // 'remove' a block
             level[index].visible = false;
             removeBlocks = true;
 
         }
     } // toggleBlock
 
-    public function placeFree( x:Float, y:Float ) {
+    public function placeFree( x : Float, y : Float ) {
 
         //checks if the a block sprite at given point (x,y) in the level array is visible or not
+
         x = Math.floor(x / tileSize);        // converts the level x position to the leve array x position
         y = Math.floor(y / tileSize);        // same for the y position
         
+        // get the index
         var index : Int = Std.int(x + y * levelWidth);
         
         // returns true if not visible and false if visible
