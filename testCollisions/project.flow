@@ -1,0 +1,25 @@
+{
+
+  project : {
+    name : 'test - collisions',
+    version : '1.0.0',
+    author : 'Clemens Scott',
+
+    app : {
+      name : 'luxe_test_collisions',
+      package : 'org.luxeengine.test_collisions'
+    },
+
+    build : {
+      dependencies : {
+        luxe : '*',
+      }
+    },
+
+    files : {
+      assets : 'assets/'
+    }
+
+  }
+
+}

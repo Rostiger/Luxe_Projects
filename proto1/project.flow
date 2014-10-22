@@ -1,0 +1,25 @@
+{
+
+  project : {
+    name : 'luxe - proto1',
+    version : '0.0.1',
+    author : 'Clemens Scott',
+
+    app : {
+      name : 'luxe_proto1',
+      package : 'org.luxeengine.proto1'
+    },
+
+    build : {
+      dependencies : {
+        luxe : '*',
+      }
+    },
+
+    files : {
+      assets : 'assets/'
+    }
+
+  }
+
+}

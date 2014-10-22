@@ -1,0 +1,25 @@
+{
+
+  project : {
+    name : 'luxe - test - arrays',
+    version : '1.0.0',
+    author : 'Clemens Scott',
+
+    app : {
+      name : 'luxe_test_arrays',
+      package : 'org.luxeengine.testArrays'
+    },
+
+    build : {
+      dependencies : {
+        luxe : '*',
+      }
+    },
+
+    files : {
+      assets : 'assets/'
+    }
+
+  }
+
+}
