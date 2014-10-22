@@ -1,13 +1,13 @@
 {
 
   project : {
-    name : 'empty',
+    name : 'test - sprite - animation',
     version : '1.0.0',
-    author : 'luxeengine',
+    author : 'Clemens Scott',
 
     app : {
-      name : 'luxe_empty',
-      package : 'org.luxeengine.empty'
+      name : 'test-sprite-animation',
+      package : 'org.luxeengine.test-sprite-animation'
     },
 
     build : {
