@@ -71,6 +71,24 @@ class Movement extends Component {
 
 		}
 
+		// This is where the core of the movement and the collision checking happens.
+		// I've copied & adapted the code & concept from a Processing sample by Jacob Haip:
+		// http://www.openprocessing.org/sketch/17115
+
+		// Here's the description of the technique in his words,
+		// I've changed the variable names to reflect my version of the code:
+
+	    /*
+	    // The technique used for movement involves taking the integer (without the decimal)
+	    // part of the player's velocity (vel.x and vel.y) for the number of pixels to try to move,
+	    // respectively.  The decimal part is accumulated in rest.x & rest.y so that once
+	    // they reach a value of 1, the player should try to move 1 more pixel.  This jump
+	    // is not normally visible if it is moving fast enough.  This method is used because
+	    // is guarantees that movement is pixel perfect because the player's position will
+	    // always be at a whole number.  Whole number positions prevents problems when adding
+	    // new elements like jump through blocks or slopes.
+	    */
+
 		// set the y direction depending on the y velocity
 		dir.x =  (vel.x > 0 ) ? 1 : -1;
 		dir.y =  (vel.y > 0 ) ? 1 : -1;
@@ -84,7 +102,7 @@ class Movement extends Component {
 		rest.x += Math.abs(vel.x) - Math.floor( Math.abs(vel.x) );
 		rest.y += Math.abs(vel.y) - Math.floor( Math.abs(vel.y) );
 
-		// evertime the rest becomes larger than one, reset it to 0 and add 1 to the whole number of velocity
+		// every time the rest becomes larger than one, reset it to 0 and add 1 to the whole number of velocity
      	if (rest.x >= 1) {
      		rest.x = 0;
      		intVel.x++;
@@ -95,7 +113,7 @@ class Movement extends Component {
      		intVel.y++;
      	}
 
-     	// set an offset
+     	// set an offset to take the player's width and height in consideration
         var offset = new Vector( 0, 0 );
         offset.x = (vel.x < 0) ? 0 : sprite.size.x - 1;
         offset.y = (vel.y < 0) ? 0 : sprite.size.y - 1;
