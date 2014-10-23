@@ -14,8 +14,7 @@ class Movement extends Component {
 	var rest : Vector;
 	var gravity : Float;
 	var jumpStrength : Float;
-	var jump : Bool;
-	var canJump : Bool;
+	var upReleased : Bool;
 	var sprite : Sprite;
 
 	override function init() {
@@ -28,44 +27,46 @@ class Movement extends Component {
 		rest = new Vector( 0, 0 );
 		gravity = 0.5;
 		jumpStrength = -10.0;
-		jump = false;
-		canJump = true;
+		upReleased = true;
 		sprite = cast entity;
 	}
 
 	override function update( dt:Float ) {
 
 		// set the x direction depending on the input
+		// this is still wonky and should be done properly at some point
 		if (Luxe.input.inputdown( 'left' ) && !Luxe.input.inputdown( 'right' )) dir.x = -1;
 		else if (Luxe.input.inputdown( 'right') && !Luxe.input.inputdown( 'left' )) dir.x = 1;
 		else dir.x = 0;
 
 		// set the x velocity depending on the direction
 		if (dir.x != 0) {
+			// acceleration
 			if (Math.abs(vel.x) < maxSpeed) vel.x += acc * dir.x;
 			else vel.x = maxSpeed * dir.x;
+
 		} else {
+			// deceleration
 			if (Math.abs(vel.x) > 1) vel.x *= dec;
 			else vel.x = 0;
 		}
 
-		// check if jump was pressed and if the player can jump
-     	if (Luxe.input.inputdown( 'up' ) && canJump) {
-
-     		canJump = false;
-     		jump = true;
-
-     	}
-
      	// check if the player is on solid ground, e.g. has a collision below
-     	if (jump && (!LuxeApp._game.placeFree( pos.x, pos.y + sprite.size.y ) || !LuxeApp._game.placeFree( pos.x + sprite.size.x - 1, pos.y + sprite.size.y ))) {
-     			
+     	if (!LuxeApp._game.placeFree( pos.x, pos.y + sprite.size.y ) || 
+     		!LuxeApp._game.placeFree( pos.x + sprite.size.x - 1, pos.y + sprite.size.y )) {
+     		
+     		// if there is a collision and the player pressed up, jump
+     		if (Luxe.input.inputdown( 'up' ) && upReleased) {
+
      			vel.y = jumpStrength;
-     			jump = false;
+     			upReleased = false;
+     		
+     		// this makes sure the player can only jump again after releasing the jump key
+     		} else if (!Luxe.input.inputdown( 'up' )) upReleased = true;
 
      	} else {
 
-			// falling
+			// if there isn't a collision, the player is falling
 			vel.y += gravity;
 
 		}
@@ -122,13 +123,7 @@ class Movement extends Component {
 
 			    pos.y += dir.y;
 			
-			} else {
-
-				vel.y = 0;
-
-				// if the jump key was released, let the player jump again
-			    if (!Luxe.input.inputdown( 'up' )) canJump = true;
-			}
+			} else vel.y = 0;
 
 			y--;
      	}
