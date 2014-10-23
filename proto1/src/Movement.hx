@@ -24,10 +24,10 @@ class Movement extends Component {
 		vel = new Vector( 0, 0 );
 		acc = 0.9;
 		dec = 0.89;
-		maxSpeed = 10;
+		maxSpeed = 7;
 		rest = new Vector( 0, 0 );
 		gravity = 0.5;
-		jumpStrength = -15.0;
+		jumpStrength = -10.0;
 		jump = false;
 		canJump = true;
 		sprite = cast entity;
