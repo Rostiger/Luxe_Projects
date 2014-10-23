@@ -28,6 +28,8 @@ class Movement extends Component {
 		gravity = 0.5;
 		jumpStrength = -10.0;
 		upReleased = true;
+
+		// we cas the entity of the player sprite to be able to access it's width and height
 		sprite = cast entity;
 	}
 
