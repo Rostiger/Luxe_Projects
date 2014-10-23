@@ -1,13 +1,13 @@
 {
 
   project : {
-    name : 'luxe - proto1',
+    name : 'luxe - platform - movement',
     version : '0.0.1',
     author : 'Clemens Scott',
 
     app : {
-      name : 'luxe_proto1',
-      package : 'org.luxeengine.proto1'
+      name : 'platform_movement',
+      package : 'org.luxeengine.platform_movement'
     },
 
     build : {
